@@ -30,4 +30,12 @@ document.body.addEventListener('click', function (event) {
   if (target.classList.contains('todo-remove')) {
     target.closest('li').remove();
   }
+
+  if (target.classList.contains('todo-complete')) {
+    if (target.closest('ul') && target.closest('ul') === todo) {
+      completed.prepend(target.closest('li'));
+    } else {
+      todo.prepend(target.closest('li'));
+    }
+  }
 });
