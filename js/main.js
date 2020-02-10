@@ -17,8 +17,17 @@ const createItem = function (value) {
 
 addBtn.addEventListener('click', function (event) {
   event.preventDefault();
-  if (headerInput.value !== '') {
-    todo.prepend(createItem(headerInput.value));
+  if (headerInput.value !== '' && headerInput.value.trim() !== '') {
+    todo.prepend(createItem(headerInput.value.trim()));
     headerInput.value = '';
+  }
+});
+
+document.body.addEventListener('click', function (event) {
+  let target = event.target;
+  if (target.tagName != 'BUTTON') return;
+
+  if (target.classList.contains('todo-remove')) {
+    target.closest('li').remove();
   }
 });
