@@ -7,13 +7,49 @@ let todo = document.getElementById('todo'),
   completed = document.getElementById('completed');
 
 const createItem = function (value) {
-  let item = document.createElement('li');
+    let item = document.createElement('li');
 
-  item.classList.add('todo-item');
-  item.innerHTML = value + '<div class="todo-buttons"><button class="todo-remove"></button><button class="todo-complete"></button></div>';
+    item.classList.add('todo-item');
+    item.innerHTML = value + '<div class="todo-buttons"><button class="todo-remove"></button><button class="todo-complete"></button></div>';
 
-  return item;
-};
+    return item;
+  },
+  saveData = function () {
+    let checked = [],
+      unchecked = [];
+
+    completed.querySelectorAll('li').forEach((item) => {
+      checked.push(item.textContent.trim());
+    });
+
+    todo.querySelectorAll('li').forEach((item) => {
+      unchecked.push(item.textContent.trim());
+    });
+
+    localStorage.setItem('completed', checked);
+    localStorage.setItem('todo', unchecked);
+  },
+  readData = function () {
+    let checked = [],
+      unchecked = [];
+
+    checked = localStorage.getItem('completed').split(',');
+    unchecked = localStorage.getItem('todo').split(',');
+
+    checked.forEach((item) => {
+      if (item !== '') {
+        completed.append(createItem(item));
+      }
+    });
+
+    unchecked.forEach((item) => {
+      if (item !== '') {
+        todo.append(createItem(item));
+      }
+    });
+  };
+
+document.addEventListener('DOMContentLoaded', readData);
 
 addBtn.addEventListener('click', function (event) {
   event.preventDefault();
@@ -25,7 +61,9 @@ addBtn.addEventListener('click', function (event) {
 
 document.body.addEventListener('click', function (event) {
   let target = event.target;
-  if (target.tagName != 'BUTTON') return;
+  if (target.tagName !== 'BUTTON') {
+    return;
+  }
 
   if (target.classList.contains('todo-remove')) {
     target.closest('li').remove();
@@ -38,4 +76,6 @@ document.body.addEventListener('click', function (event) {
       todo.prepend(target.closest('li'));
     }
   }
+
+  saveData();
 });
